@@ -1,0 +1,48 @@
+{
+  "name": "shai-scanner",
+  "version": "4.5.0",
+  "description": "Dependency-light Shai-Hulud, Mini Shai-Hulud, OSV, and GitHub Advisory scanner for npm projects",
+  "keywords": [
+    "security",
+    "npm",
+    "supply-chain",
+    "malware",
+    "scanner",
+    "shai-hulud",
+    "mini-shai-hulud",
+    "ioc"
+  ],
+  "author": "Security Tools",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "bin": {
+    "shai-scanner": "src/cli.js"
+  },
+  "files": [
+    "src",
+    "index.d.ts",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE",
+    "examples",
+    "AUDIT_NOTES.md"
+  ],
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node test/self-test.js",
+    "scan:self": "node src/cli.js --scan . --offline --no-auto-update",
+    "scan:lockfiles": "node src/cli.js --scan . --lockfiles-only --offline --no-auto-update",
+    "update-db": "node src/cli.js --update"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

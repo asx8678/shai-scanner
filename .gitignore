@@ -1,0 +1,12 @@
+node_modules/
+*.Zone.Identifier
+*:Zone.Identifier
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+dist/
+build/
+coverage/
+.cache/

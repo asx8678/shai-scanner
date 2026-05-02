@@ -1,0 +1,26 @@
+name: Shai-Hulud supply-chain scan
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  shai-scanner:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Scan dependency tree
+        run: npx shai-scanner --scan . --live --fail-on-advisory --sarif --output shai-scanner.sarif
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: shai-scanner.sarif
