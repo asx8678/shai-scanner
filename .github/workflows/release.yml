@@ -215,6 +215,20 @@ jobs:
           echo "npm install -g shai-scanner@${{ steps.version.outputs.VERSION_CLEAN }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
       
+      - name: Trigger npm publish workflow
+        if: success()
+        run: |
+          echo "Triggering npm publish workflow..."
+          echo "Version to publish: ${{ steps.version.outputs.VERSION_CLEAN }}"
+          gh workflow run publish.yml \
+            -f version="${{ steps.version.outputs.VERSION_CLEAN }}" \
+            -f dry_run=false \
+            --ref main
+          echo "✅ Publish workflow triggered successfully"
+          echo "Check: https://github.com/${{ github.repository }}/actions/workflows/publish.yml"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Notify on failure
         if: failure()
         run: |
