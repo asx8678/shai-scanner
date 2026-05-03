@@ -36,7 +36,7 @@ This version is a ground-up hardening pass over the older React/Ink TUI bundle. 
 From this zip:
 
 ```bash
-cd shai-scanner-4.6.0
+cd shai-scanner-4.6.1
 node src/cli.js --help
 node src/cli.js --scan . --offline --no-auto-update
 ```

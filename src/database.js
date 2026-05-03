@@ -34,7 +34,7 @@ export class VulnerabilityDatabase {
     this.cachePath = options.cachePath || getCachePath();
     this.packages = new Map();
     this.info = {
-      version: '4.6.0',
+      version: '4.6.1',
       createdAt: '2026-05-02T00:00:00Z',
       lastUpdated: null,
       lastCheckTime: null,
@@ -257,7 +257,7 @@ async function fetchText(url, timeoutMs, maxBytes) {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'shai-scanner/4.6.0' }
+      headers: { 'User-Agent': 'shai-scanner/4.6.1' }
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const text = await response.text();

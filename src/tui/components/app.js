@@ -470,7 +470,7 @@ export class ScannerTUI extends Component {
     const dbInfo = this.#db.getInfo();
     const c = this.#c;
 
-    let version = '4.6.0';
+    let version = '4.6.1';
     try {
       const { dirname } = await import('node:path');
       const { fileURLToPath } = await import('node:url');
