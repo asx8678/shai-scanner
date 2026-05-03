@@ -1,6 +1,6 @@
 {
   "name": "shai-scanner",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "description": "Dependency-light Shai-Hulud, Mini Shai-Hulud, OSV, and GitHub Advisory scanner for npm projects",
   "keywords": [
     "security",

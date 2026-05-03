@@ -101,17 +101,23 @@ jobs:
         run: |
           echo "Creating release archive..."
           
-          # Create tar.gz
+          # Create tar.gz (with race-condition protection)
           tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
+            --warning=no-file-changed \
+            --one-file-system \
             --exclude='node_modules' \
             --exclude='.git' \
             --exclude='test' \
             --exclude='docs' \
             --exclude='scripts' \
             --exclude='.github' \
+            --exclude='coverage' \
             --exclude='*.md' \
+            --exclude='*.html' \
+            --exclude='*.txt' \
             --exclude='.npmignore' \
             --exclude='.gitignore' \
+            --exclude='.c8rc.json' \
             .
           
           # Create zip
@@ -122,9 +128,13 @@ jobs:
             -x "docs/*" \
             -x "scripts/*" \
             -x ".github/*" \
+            -x "coverage/*" \
             -x "*.md" \
+            -x "*.html" \
+            -x "*.txt" \
             -x ".npmignore" \
             -x ".gitignore" \
+            -x ".c8rc.json" \
             .
           
           echo "Release archives created:"
@@ -138,13 +148,13 @@ jobs:
           cat checksums-${{ steps.version.outputs.VERSION }}.sha256
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.VERSION }}
           name: shai-scanner ${{ steps.version.outputs.VERSION }}
           body_path: release_notes.md
           draft: false
-          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.prerelease == 'true' || false }}
           files: |
             shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz
             shai-scanner-${{ steps.version.outputs.VERSION }}.zip
