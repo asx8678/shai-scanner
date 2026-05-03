@@ -1,7 +1,7 @@
 {
   "name": "quick-start-shai-scanner",
   "version": "1.0.0",
-  "description": "Quick start template for shai-scanner v4.6.0 supply-chain security scanning",
+  "description": "Quick start template for shai-scanner v4.6.5 supply-chain security scanning",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -32,6 +32,6 @@
     "axios": "^1.6.0"
   },
   "devDependencies": {
-    "shai-scanner": "^4.6.0"
+    "shai-scanner": "^4.6.5"
   }
 }

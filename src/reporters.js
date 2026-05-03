@@ -108,7 +108,7 @@ export function renderSarifReport(result) {
     version: '2.1.0',
     $schema: 'https://json.schemastore.org/sarif-2.1.0.json',
     runs: [{
-      tool: { driver: { name: 'shai-scanner', version: '4.6.1', rules: Array.from(rules.values()) } },
+      tool: { driver: { name: 'shai-scanner', version: '4.6.5', rules: Array.from(rules.values()) } },
       results
     }]
   }, null, 2);

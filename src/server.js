@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { VulnerabilityDatabase } from './database.js';
 import { Scanner } from './scanner.js';
 
-const VERSION = '4.6.0';
+const VERSION = '4.6.5';
 const PORT = Number(process.env.PORT) || 3000;
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

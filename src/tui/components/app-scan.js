@@ -11,7 +11,7 @@
 import { sanitize } from '../../utils.js';
 import { LiveProgress } from '../../tui.js';
 import { EXIT_CODES } from '../../constants.js';
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 
 // ─── Lazy-loaded modules ─────────────────────────────────────────────────────
 let _scanner, _liveSources, _audit;
@@ -93,7 +93,7 @@ export async function runLegacyScanning({ scanOptions, db, c, navigateTo, onSave
   let activePhase = null;
   const scanStartMs = Date.now();
   let results = null;
-  let exitCode = EXIT_CODES.SUCCESS;
+  let exitCode;
 
   try {
     results = await scanner.scan(

@@ -14,6 +14,14 @@
   ],
   "author": "Security Tools",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asx8678/shai-scanner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/asx8678/shai-scanner/issues"
+  },
+  "homepage": "https://github.com/asx8678/shai-scanner#readme",
   "type": "module",
   "main": "src/index.js",
   "types": "index.d.ts",
@@ -33,16 +41,26 @@
     "SECURITY.md",
     "LICENSE",
     "examples",
-    "AUDIT_NOTES.md"
+    "AUDIT_NOTES.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "start": "node src/cli.js",
     "test": "node test/self-test.js",
     "scan:self": "node src/cli.js --scan . --offline --no-auto-update",
     "scan:lockfiles": "node src/cli.js --scan . --lockfiles-only --offline --no-auto-update",
-    "update-db": "node src/cli.js --update"
+    "update-db": "node src/cli.js --update",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0"
   }
 }

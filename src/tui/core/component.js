@@ -107,7 +107,7 @@ export class Component {
    * @param {object} key - Key object with name, char, raw properties
    * @returns {boolean} true if handled, false to bubble up
    */
-  handleKey(key) {
+  handleKey(_key) {
     return false; // Not handled — bubble up
   }
 

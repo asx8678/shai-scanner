@@ -1,4 +1,4 @@
-# Shai-Scanner 4.5
+# Shai-Scanner
 
 Dependency-light scanner for Shai-Hulud, Shai-Hulud 2.0/3.0, and Mini Shai-Hulud npm supply-chain indicators.
 
@@ -36,7 +36,7 @@ This version is a ground-up hardening pass over the older React/Ink TUI bundle. 
 From this zip:
 
 ```bash
-cd shai-scanner-4.6.1
+cd shai-scanner-4.6.5
 node src/cli.js --help
 node src/cli.js --scan . --offline --no-auto-update
 ```

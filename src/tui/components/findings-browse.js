@@ -4,8 +4,7 @@
 // that owns the full input/output loop.
 
 import { sanitize } from '../../utils.js';
-import { spawn } from 'node:child_process';
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 
 import { ANSI } from '../../tui.js';
 import { SelectMenu } from './menu.js';

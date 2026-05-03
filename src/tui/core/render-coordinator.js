@@ -1,10 +1,10 @@
 // src/tui/core/render-coordinator.js
 // Central render management for TUI components
 
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 import { Renderer, ANSI } from './renderer.js';
 import { VirtualScreen } from './virtual-screen.js';
-import { Component } from './component.js';
+
 
 // ─── Debounce utility ────────────────────────────────────────────────────────
 
@@ -164,7 +164,7 @@ export class RenderCoordinator {
     this.#renderer = new Renderer(
       {
         terminalSize: { ...this.#terminalSize },
-        onResize(cb) {
+        onResize(_cb) {
           // Resize is handled by #handleResize directly
           return () => {};
         },

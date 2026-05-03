@@ -11,14 +11,12 @@
  */
 
 import { createHash } from 'node:crypto';
-import { readFileSync, existsSync, statSync } from 'node:fs';
-import { resolve, relative } from 'node:path';
 
 // SPDX document version
 const SPDX_VERSION = 'SPDX-2.3';
 const SPDX_DATA_LICENSE = 'CC0-1.0';
-const SPDX_CREATOR_TOOL = 'shai-scanner@4.6.0'; // Update this when version changes
-const TOOL_VERSION = '4.6.0';
+const SPDX_CREATOR_TOOL = 'shai-scanner@4.6.5'; // Update this when version changes
+const TOOL_VERSION = '4.6.5';
 
 /**
  * Generate a SPDX 2.3 SBOM from scan results.
@@ -35,7 +33,6 @@ export function generateSBOM(result, options = {}) {
   const format = options.format || 'json';
   const name = options.name || result.project?.name || 'scan';
   const namespace = options.namespace || `https://shai-scanner.dev/spdx/${name}/${Date.now()}`;
-  const rootPath = options.rootPath || process.cwd();
 
   // Extract inventory and findings
   const inventory = result.inventory || [];

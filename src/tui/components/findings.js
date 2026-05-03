@@ -356,7 +356,6 @@ export class FindingsBrowser extends Component {
   }
 
   #renderList(screen, row, filtered, total, pages) {
-    const c = this.#c;
     const start = this.#page * this.#perPage;
     const pageItems = filtered.slice(start, start + this.#perPage);
 
@@ -375,7 +374,6 @@ export class FindingsBrowser extends Component {
     } else {
       for (let i = 0; i < pageItems.length; i++) {
         const f = pageItems[i];
-        const gIdx = start + i;
         const icon = SEVERITY_ICON[f.severity] || '⚪';
         const sev = (f.severity || '?').toUpperCase().padEnd(8);
         const pkg = sanitize(`${f.packageName || '?'}@${f.packageVersion || '?'}`, 35);

@@ -4,7 +4,7 @@
 import { stdin as processStdin, stdout as processStdout } from 'node:process';
 import { ANSI } from './renderer.js';
 import { registerCleanup } from './cleanup.js';
-import { onResize, getTerminalSize } from './terminal.js';
+import { onResize } from './terminal.js';
 
 /**
  * @typedef {object} ScreenManagerOptions

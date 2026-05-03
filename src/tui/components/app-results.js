@@ -8,8 +8,8 @@
 //   exportReport({ format, results, c, auditResult, getReportersModule })
 
 import { sanitize } from '../../utils.js';
-import { SelectMenu, TextInput, confirm, Box } from '../../tui.js';
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { SelectMenu, TextInput, Box } from '../../tui.js';
+import { stdout as processStdout } from 'node:process';
 import { join } from 'node:path';
 
 // ─── Component-mode render ───────────────────────────────────────────────────
@@ -94,7 +94,7 @@ export async function runLegacyResults({
   c,
   useColor,
   navigateTo,
-  resultsItems,
+  _resultsItems,
   getFindingsBrowserModule,
 }) {
   if (!results) {
@@ -103,10 +103,7 @@ export async function runLegacyResults({
     return;
   }
 
-  const { findings, stats } = results;
-  const infectedPackages = new Set(findings.filter((f) => f.packageName).map((f) => f.packageName));
-  const infectedCount = infectedPackages.size;
-  const cleanCount = Math.max(0, stats.packagesScanned - infectedCount);
+  const { findings } = results;
   const cveFindings = findings.filter((f) => f.attack?.startsWith('CVE-'));
   const cveCount = new Set(cveFindings.map((f) => f.attack)).size;
   const iocFindings = findings.filter(

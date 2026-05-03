@@ -2,7 +2,7 @@
 // Shared helper functions for FindingsBrowser component
 // Extracted to keep the main component file under 600 lines
 
-import { colorize, sanitize } from '../../utils.js';
+import { sanitize } from '../../utils.js';
 import { spawn } from 'node:child_process';
 import { stdout as processStdout } from 'node:process';
 

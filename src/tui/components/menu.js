@@ -5,7 +5,7 @@
 // Stage 3 of Phase 2 TUI component migration
 
 import { Component } from '../core/component.js';
-import { colorize, stripAnsi } from '../../utils.js';
+import { colorize } from '../../utils.js';
 
 // Process stdin/stdout references
 import { stdin as processStdin, stdout as processStdout } from 'node:process';

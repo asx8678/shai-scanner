@@ -228,7 +228,7 @@ export class Scanner {
     stats.inventoryPackages = packageInventory.length;
     const duration = Date.now() - start;
     return {
-      tool: { name: 'shai-scanner', version: '4.6.1' },
+      tool: { name: 'shai-scanner', version: '4.6.5' },
       scannedPaths: scanPaths,
       findings: uniqueFindings,
       vulnerabilities: uniqueFindings.filter((f) => VULNERABILITY_FINDING_TYPES.has(f.type)),

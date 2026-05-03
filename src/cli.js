@@ -11,7 +11,7 @@ import { renderJsonReport, renderSarifReport, renderTextReport } from './reporte
 import { queryLiveAdvisories } from './live-sources.js';
 import { colorize, parsePackageSpec, sanitize, uniqueBy } from './utils.js';
 
-const VERSION = '4.6.1';
+const VERSION = '4.6.5';
 const LIVE_VULNERABILITY_TYPES = new Set(['live-osv-advisory', 'live-github-advisory', 'live-github-malware-advisory']);
 
 function parseArgs(argv) {
@@ -43,6 +43,7 @@ function parseArgs(argv) {
     initCi: false,
     listDb: false,
     searchDb: null,
+    tui: false,
     help: false,
     version: false
   };
@@ -93,6 +94,7 @@ function parseArgs(argv) {
     else if (arg === '--import-csv') opts.importCsv.push(argv[++i]);
     else if (arg === '--output' || arg === '-o') opts.outputFile = argv[++i];
     else if (arg === '--init-ci') opts.initCi = true;
+    else if (arg === '--tui') opts.tui = true;
     else if (arg === '--list-db') opts.listDb = true;
     else if (arg === '--search-db') opts.searchDb = argv[++i] || '';
     else if (arg === '--') { while (argv[i + 1]) opts.paths.push(argv[++i]); }
@@ -129,6 +131,9 @@ Core options:
   --sarif                 Emit SARIF report for GitHub code scanning
   --output, -o <file>     Write report to file
 
+TUI mode:
+  --tui                   Launch interactive terminal UI (TUI)
+
 Database options:
   --update                Fetch latest Datadog IOC feeds and cache locally
   --offline               Disable all network calls, including live advisory queries
@@ -153,6 +158,7 @@ Examples:
   shai-scanner --check intercom-client@7.0.4 --live
   shai-scanner --scan . --live --fail-on-advisory
   shai-scanner --scan . --live-osv --sarif -o shai-scanner.sarif
+  shai-scanner --tui
 `);
 }
 
@@ -224,6 +230,12 @@ async function main() {
   if (opts.help) { printHelp(); return; }
   if (opts.version) { console.log(VERSION); return; }
   if (opts.initCi) { console.log(ciWorkflow()); return; }
+
+  if (opts.tui) {
+    const { runTUI } = await import('./tui/components/app.js');
+    process.exitCode = await runTUI(opts);
+    return;
+  }
 
   if (opts.offline) process.env.SHAI_SCANNER_OFFLINE = '1';
   if (!opts.autoUpdate) process.env.SHAI_SCANNER_NO_AUTO_UPDATE = '1';

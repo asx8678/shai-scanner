@@ -15,9 +15,6 @@ import { Component } from '../core/component.js';
 import { colorize, sanitize, getCacheDir } from '../../utils.js';
 import {
   SelectMenu,
-  confirm,
-  Spinner,
-  Box,
   cleanupTerminal,
   onResize,
   debounce,
@@ -43,13 +40,10 @@ import {
 } from './app-utils.js';
 
 // ─── Lazy-loaded modules ─────────────────────────────────────────────────────
-let _database, _reporters, _findingsBrowser;
+let _database, _findingsBrowser;
 
 async function getDatabaseModule() {
   return (_database ??= await import('../../database.js'));
-}
-async function getReportersModule() {
-  return (_reporters ??= await import('../../reporters.js'));
 }
 async function getFindingsBrowserModule() {
   return (_findingsBrowser ??= await import('./findings.js'));
@@ -165,14 +159,14 @@ export class ScannerTUI extends Component {
 
     const startRow = ctx?.bounds?.row ?? 0;
     const maxCols = screen.cols;
-    let row = startRow;
+    const row = startRow;
 
     switch (this.currentScreen) {
       case SCREENS.MAIN_MENU:
-        row = this.#renderMainMenuToScreen(screen, ctx, row, c, maxCols);
+        this.#renderMainMenuToScreen(screen, ctx, row, c, maxCols);
         break;
       case SCREENS.RESULTS:
-        row = renderResultsToScreen(
+        renderResultsToScreen(
           screen,
           ctx,
           row,
@@ -183,19 +177,19 @@ export class ScannerTUI extends Component {
         );
         break;
       case SCREENS.SCAN_CONFIG:
-        row = renderScanConfigToScreen(screen, ctx, row, c, this.scanOptions);
+        renderScanConfigToScreen(screen, ctx, row, c, this.scanOptions);
         break;
       case SCREENS.SCANNING:
-        row = renderScanningToScreen(screen, ctx, row, c);
+        renderScanningToScreen(screen, ctx, row, c);
         break;
       case SCREENS.CHECK_PACKAGE:
-        row = renderCheckPackageToScreen(screen, ctx, row, c);
+        renderCheckPackageToScreen(screen, ctx, row, c);
         break;
       case SCREENS.UPDATE_DB:
-        row = renderUpdateDbToScreen(screen, ctx, row, c);
+        renderUpdateDbToScreen(screen, ctx, row, c);
         break;
       case SCREENS.SEARCH_DB:
-        row = renderSearchDbToScreen(screen, ctx, row, c);
+        renderSearchDbToScreen(screen, ctx, row, c);
         break;
     }
   }
@@ -470,7 +464,7 @@ export class ScannerTUI extends Component {
     const dbInfo = this.#db.getInfo();
     const c = this.#c;
 
-    let version = '4.6.1';
+    let version = '4.6.5';
     try {
       const { dirname } = await import('node:path');
       const { fileURLToPath } = await import('node:url');

@@ -10,7 +10,7 @@ import { resolve, parse, dirname, join, extname, relative, basename } from 'node
 import { stdin as processStdin, stdout as processStdout } from 'node:process';
 
 // ─── Shared KeyReader / ANSI / resize imports from original tui.js ───────────
-import { KeyReader, ANSI, onResize, getTerminalSize } from '../../tui.js';
+import { KeyReader, onResize, getTerminalSize } from '../../tui.js';
 
 // ─── Done sentinel (frozen, shared between class and static run) ─────────────
 const DONE_ENTRY = Object.freeze({

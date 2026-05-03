@@ -1,7 +1,7 @@
 // src/tui/core/cleanup.js
 // Terminal cleanup and process signal handling
 
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 import { ANSI } from './renderer.js';
 
 // ─── Cleanup tracker ──────────────────────────────────────────────────────────

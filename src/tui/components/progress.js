@@ -3,7 +3,7 @@
 // Maintains backward compatibility with the original classes in tui.js
 
 import { Component } from '../core/component.js';
-import { colorize, stripAnsi } from '../../utils.js';
+import { colorize } from '../../utils.js';
 
 // Process stderr reference for terminal detection
 import { stderr as processStderr } from 'node:process';
@@ -389,7 +389,7 @@ export class LiveProgress {
     // Final render with no animation
     if (this.#isTTY) {
       // Set all active phases to pending (no spinner)
-      for (const [name, state] of this.#phaseStates) {
+      for (const [, state] of this.#phaseStates) {
         if (state.status === 'active') state.status = 'pending';
       }
       this.render();

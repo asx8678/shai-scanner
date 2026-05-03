@@ -6,7 +6,7 @@
  */
 
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { resolve, join, relative, isAbsolute } from 'node:path';
+import { resolve, relative } from 'node:path';
 import { glob } from 'node:fs/promises';
 import { Scanner } from './scanner.js';
 import { colorize } from './utils.js';
@@ -237,7 +237,7 @@ async function executeWithConcurrency(items, concurrency, task) {
  */
 function aggregateResults(successfulResults, errors, allPaths) {
   const aggregated = {
-    tool: { name: 'shai-scanner', version: '4.6.0', mode: 'multi-project' },
+    tool: { name: 'shai-scanner', version: '4.6.5', mode: 'multi-project' },
     scanType: 'multi-project',
     scannedPaths: allPaths,
     projects: [],
@@ -526,7 +526,7 @@ export function renderMultiProjectSarifReport(aggregatedResult) {
           tool: {
             driver: {
               name: 'shai-scanner',
-              version: '4.6.0',
+              version: '4.6.5',
               rules: Array.from(rules.values()),
               properties: {
                 scanMode: 'multi-project',
@@ -666,7 +666,7 @@ export function renderMultiProjectHtmlReport(aggregatedResult) {
     }
 
     <div class="footer">
-      <p>Shai-Scanner ${aggregatedResult.tool?.version || '4.6.0'} | Multi-Project Report</p>
+      <p>Shai-Scanner ${aggregatedResult.tool?.version || '4.6.5'} | Multi-Project Report</p>
     </div>
   </div>
 </body>

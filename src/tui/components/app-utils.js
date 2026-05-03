@@ -9,7 +9,7 @@
 
 import { sanitize, parsePackageSpec } from '../../utils.js';
 import { TextInput, confirm, Spinner, Box } from '../../tui.js';
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

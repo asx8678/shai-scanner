@@ -6,7 +6,7 @@
 //   runLegacyScanConfig(c, scanOptions, navigateTo)
 
 import { CheckboxMenu, TextInput, confirm, FileBrowser, Box } from '../../tui.js';
-import { stdin as processStdin, stdout as processStdout } from 'node:process';
+import { stdout as processStdout } from 'node:process';
 
 // ─── Component-mode render ───────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 # Shai-Scanner Quick Start Template
 
-> A ready-to-clone project template that wires up shai-scanner v4.6.0 with GitHub Actions security scanning from the jump. 🚀
+> A ready-to-clone project template that wires up shai-scanner v4.6.5 with GitHub Actions security scanning from the jump. 🚀
 
 ## What This Template Gives You
 
@@ -189,7 +189,7 @@ my-project/
 Make sure shai-scanner is installed globally or use npx:
 
 ```bash
-npm install -g shai-scanner@4.6.0
+npm install -g shai-scanner@4.6.5
 # or
 npx shai-scanner --scan .
 ```

@@ -241,7 +241,7 @@ try {
   test('renderMultiProjectTextReport produces output', () => {
     const paths = [join(root, 'project1'), join(root, 'project2')];
     const result = {
-      tool: { name: 'shai-scanner', version: '4.6.0', mode: 'multi-project' },
+      tool: { name: 'shai-scanner', version: '4.6.5', mode: 'multi-project' },
       scannedPaths: paths,
       projects: [
         { path: paths[0], findingsCount: 1, vulnerabilitiesCount: 1, duration: 10, stats: {} },
@@ -275,7 +275,7 @@ try {
 
   test('renderMultiProjectJsonReport produces valid JSON', () => {
     const result = {
-      tool: { name: 'shai-scanner', version: '4.6.0', mode: 'multi-project' },
+      tool: { name: 'shai-scanner', version: '4.6.5', mode: 'multi-project' },
       projects: [],
       findings: [],
       stats: { totalProjects: 0 }

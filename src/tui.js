@@ -12,18 +12,12 @@
 
 import {
   stdin as processStdin,
-  stdout as processStdout,
-  stderr as processStderr,
 } from 'node:process';
-import { createInterface } from 'node:readline/promises';
-import { colorize, stripAnsi } from './utils.js';
 
 // Import core infrastructure from dedicated modules
 import {
-  registerCleanup,
   cleanupTerminal as coreCleanupTerminal,
   resetCleanupState as coreResetCleanupState,
-  getCleanupHandlers,
   markCleanupRegistered,
   isCleanupRegistered,
 } from './tui/core/cleanup.js';

@@ -6,3 +6,4 @@ export { detectPackageManager, runAudit } from './audit.js';
 export { renderJsonReport, renderSarifReport, renderTextReport } from './reporters.js';
 export { rangeMayIncludeVersion } from './semver-lite.js';
 export { queryOsvForPackages, queryGithubAdvisoriesForPackages, queryLiveAdvisories, liveVulnToFinding } from './live-sources.js';
+export { generateSBOM, generateMinimalSBOM, validateNTIACompliance } from './sbom.js';

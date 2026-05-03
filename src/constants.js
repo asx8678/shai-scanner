@@ -3,7 +3,8 @@ export const EXIT_CODES = Object.freeze({
   VULNERABILITIES_FOUND: 1,
   SCAN_ERROR: 2,
   UPDATE_ERROR: 3,
-  INVALID_ARGS: 4
+  INVALID_ARGS: 4,
+  INTERRUPTED: 130
 });
 
 export const DEFAULTS = Object.freeze({
