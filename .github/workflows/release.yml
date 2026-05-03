@@ -122,6 +122,7 @@ jobs:
           
           # Create zip
           zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
+            . \
             -x "node_modules/*" \
             -x ".git/*" \
             -x "test/*" \
@@ -134,8 +135,7 @@ jobs:
             -x "*.txt" \
             -x ".npmignore" \
             -x ".gitignore" \
-            -x ".c8rc.json" \
-            .
+            -x ".c8rc.json"
           
           echo "Release archives created:"
           ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.*
