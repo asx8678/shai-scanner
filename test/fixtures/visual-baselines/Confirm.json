@@ -1,0 +1,10 @@
+{
+  "component": "Confirm",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "Continue? [Y/n]"
+  ]
+}

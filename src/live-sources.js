@@ -44,7 +44,7 @@ async function postJson(fetchImpl, url, payload, timeoutMs, headers = {}) {
       signal,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'shai-scanner/4.5.0',
+        'User-Agent': 'shai-scanner/4.6.0',
         ...headers
       },
       body: JSON.stringify(payload)
@@ -63,7 +63,7 @@ async function getJson(fetchImpl, url, timeoutMs, headers = {}) {
       method: 'GET',
       signal,
       headers: {
-        'User-Agent': 'shai-scanner/4.5.0',
+        'User-Agent': 'shai-scanner/4.6.0',
         ...headers
       }
     });
@@ -249,7 +249,7 @@ function githubHeaders(token) {
   const headers = {
     Accept: 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
-    'User-Agent': 'shai-scanner/4.5.0'
+    'User-Agent': 'shai-scanner/4.6.0'
   };
   if (token) headers.Authorization = `Bearer ${token}`;
   return headers;

@@ -11,7 +11,7 @@ import { renderJsonReport, renderSarifReport, renderTextReport } from './reporte
 import { queryLiveAdvisories } from './live-sources.js';
 import { colorize, parsePackageSpec, sanitize, uniqueBy } from './utils.js';
 
-const VERSION = '4.5.0';
+const VERSION = '4.6.0';
 const LIVE_VULNERABILITY_TYPES = new Set(['live-osv-advisory', 'live-github-advisory', 'live-github-malware-advisory']);
 
 function parseArgs(argv) {

@@ -1,0 +1,5 @@
+# Test multi-scan file
+./src
+./test
+.
+# Comments are ignored

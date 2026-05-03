@@ -1,0 +1,456 @@
+{
+  "project": "shai-scanner",
+  "stage": "Stage 3: SelectMenu & CheckboxMenu Migration",
+  "created": "2025-06-01",
+  "author": "Max 🐶",
+  "status": "not_started",
+  "estimated_effort": "4 days",
+  "phases": [
+    {
+      "id": "phase_1",
+      "name": "Foundation Setup",
+      "duration": "0.5 day",
+      "tasks": [
+        {
+          "id": "task_1_1",
+          "name": "Create menu.js skeleton",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": [],
+          "subtasks": [
+            "Create file with module header and imports",
+            "Import Component from core",
+            "Import utilities",
+            "Import process streams",
+            "Import KeyReader",
+            "Create SelectMenu class",
+            "Create CheckboxMenu class"
+          ],
+          "acceptance_criteria": [
+            "File compiles without errors",
+            "Classes properly extend Component",
+            "Imports are correct and minimal"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_1_2",
+          "name": "Define class structure",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_1_1"],
+          "subtasks": [
+            "Define SelectMenu private fields",
+            "Define CheckboxMenu private fields",
+            "Define constructor with validation",
+            "Define readonly getters",
+            "Define mount/unmount lifecycle"
+          ],
+          "acceptance_criteria": [
+            "All private fields defined",
+            "Constructor validates inputs",
+            "Public API matches requirements"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "phase_2",
+      "name": "SelectMenu Implementation",
+      "duration": "1 day",
+      "tasks": [
+        {
+          "id": "task_2_1",
+          "name": "Implement SelectMenu constructor & state",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_1_2"],
+          "subtasks": [
+            "Implement constructor with options",
+            "Initialize state fields",
+            "Handle non-TTY case",
+            "Validate inputs"
+          ],
+          "acceptance_criteria": [
+            "Constructor initializes all state",
+            "Non-TTY handling works",
+            "State encapsulated"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_2_2",
+          "name": "Implement SelectMenu lifecycle",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_2_1"],
+          "subtasks": [
+            "Implement mount() method",
+            "Create KeyReader on mount",
+            "Implement unmount() method",
+            "Destroy KeyReader on unmount"
+          ],
+          "acceptance_criteria": [
+            "KeyReader created on mount",
+            "KeyReader destroyed on unmount",
+            "No memory leaks"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_2_3",
+          "name": "Implement SelectMenu key handling",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_2_2"],
+          "subtasks": [
+            "Implement handleKey() method",
+            "Handle up/down arrows",
+            "Handle return key",
+            "Handle escape/q keys",
+            "Call setState() after changes"
+          ],
+          "acceptance_criteria": [
+            "All key bindings work",
+            "State updates trigger re-render",
+            "Complete state properly set"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_2_4",
+          "name": "Implement SelectMenu rendering",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_2_3"],
+          "subtasks": [
+            "Implement render() method",
+            "Calculate start row",
+            "Render title",
+            "Render items with selection",
+            "Render help text",
+            "Use screen.setLine()"
+          ],
+          "acceptance_criteria": [
+            "Rendering matches original",
+            "Colors applied correctly",
+            "Selection indicator visible"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_2_5",
+          "name": "Implement SelectMenu static run() method",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_2_4"],
+          "subtasks": [
+            "Implement static run() method",
+            "Maintain API signature",
+            "Handle non-TTY case",
+            "Setup render loop",
+            "Wait for completion",
+            "Cleanup and return"
+          ],
+          "acceptance_criteria": [
+            "API matches original",
+            "Behavior identical",
+            "Proper cleanup"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "phase_3",
+      "name": "CheckboxMenu Implementation",
+      "duration": "1 day",
+      "tasks": [
+        {
+          "id": "task_3_1",
+          "name": "Implement CheckboxMenu constructor & state",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_2_5"],
+          "subtasks": [
+            "Implement constructor",
+            "Initialize checked array",
+            "Clone checked states",
+            "Handle non-TTY case"
+          ],
+          "acceptance_criteria": [
+            "Checked array properly cloned",
+            "Non-TTY handling works",
+            "State encapsulated"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_3_2",
+          "name": "Implement CheckboxMenu lifecycle",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_3_1"],
+          "subtasks": [
+            "Implement mount() method",
+            "Implement unmount() method",
+            "Reuse SelectMenu pattern"
+          ],
+          "acceptance_criteria": [
+            "Lifecycle methods implemented",
+            "Resource cleanup handled"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_3_3",
+          "name": "Implement CheckboxMenu key handling",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_3_2"],
+          "subtasks": [
+            "Implement handleKey() method",
+            "Handle up/down arrows",
+            "Handle space (toggle)",
+            "Handle return (confirm)",
+            "Handle escape (cancel)",
+            "Handle 'a' (toggle all)"
+          ],
+          "acceptance_criteria": [
+            "Space toggle works",
+            "'a' key toggles all",
+            "Return provides correct values"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_3_4",
+          "name": "Implement CheckboxMenu rendering",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_3_3"],
+          "subtasks": [
+            "Implement render() method",
+            "Render checkboxes",
+            "Render selection indicator",
+            "Render dynamic help text",
+            "Use screen.setLine()"
+          ],
+          "acceptance_criteria": [
+            "Checkboxes rendered correctly",
+            "Selection indicator visible",
+            "Dynamic help text updates"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_3_5",
+          "name": "Implement CheckboxMenu static run() method",
+          "agent": "Implementation Agent",
+          "files": ["src/tui/components/menu.js"],
+          "dependencies": ["task_3_4"],
+          "subtasks": [
+            "Implement static run() method",
+            "Maintain API signature",
+            "Handle non-TTY case",
+            "Handle all key bindings",
+            "Cleanup and return"
+          ],
+          "acceptance_criteria": [
+            "API matches original",
+            "Behavior identical",
+            "Proper cleanup"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "phase_4",
+      "name": "Integration & Exports",
+      "duration": "0.5 day",
+      "tasks": [
+        {
+          "id": "task_4_1",
+          "name": "Update src/tui/index.js exports",
+          "agent": "Integration Agent",
+          "files": ["src/tui/index.js"],
+          "dependencies": ["task_2_5", "task_3_5"],
+          "subtasks": [
+            "Add import for menu components",
+            "Add exports for both components",
+            "Verify backward compatibility"
+          ],
+          "acceptance_criteria": [
+            "Components accessible from index",
+            "Existing imports work"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_4_2",
+          "name": "Update src/tui.js backward compatibility",
+          "agent": "Integration Agent",
+          "files": ["src/tui.js"],
+          "dependencies": ["task_4_1"],
+          "subtasks": [
+            "Add re-exports from menu.js",
+            "Maintain existing exports",
+            "Add deprecation comments"
+          ],
+          "acceptance_criteria": [
+            "Backward compatibility maintained",
+            "No duplicate definitions",
+            "Comments added"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "phase_5",
+      "name": "Testing",
+      "duration": "1 day",
+      "tasks": [
+        {
+          "id": "task_5_1",
+          "name": "Create test/menu-test.js",
+          "agent": "Testing Agent",
+          "files": ["test/menu-test.js"],
+          "dependencies": ["task_2_5", "task_3_5"],
+          "subtasks": [
+            "Create test file",
+            "Add test utilities",
+            "Organize test groups"
+          ],
+          "acceptance_criteria": [
+            "Test file created",
+            "Test groups organized",
+            "Test utilities ready"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_5_2",
+          "name": "Write SelectMenu tests",
+          "agent": "Testing Agent",
+          "files": ["test/menu-test.js"],
+          "dependencies": ["task_5_1"],
+          "subtasks": [
+            "Write inheritance tests",
+            "Write constructor tests",
+            "Write state tests",
+            "Write lifecycle tests",
+            "Write key handling tests",
+            "Write rendering tests",
+            "Write static run() tests"
+          ],
+          "acceptance_criteria": [
+            "All SelectMenu tests pass",
+            "Edge cases covered",
+            "Error conditions tested"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_5_3",
+          "name": "Write CheckboxMenu tests",
+          "agent": "Testing Agent",
+          "files": ["test/menu-test.js"],
+          "dependencies": ["task_5_2"],
+          "subtasks": [
+            "Write inheritance tests",
+            "Write constructor tests",
+            "Write state tests",
+            "Write lifecycle tests",
+            "Write key handling tests",
+            "Write rendering tests",
+            "Write static run() tests"
+          ],
+          "acceptance_criteria": [
+            "All CheckboxMenu tests pass",
+            "Multi-select behavior verified",
+            "Toggle all tested"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_5_4",
+          "name": "Run existing test suite",
+          "agent": "Testing Agent",
+          "files": ["all test files"],
+          "dependencies": ["task_5_2", "task_5_3"],
+          "subtasks": [
+            "Run box tests",
+            "Run input tests",
+            "Run progress tests",
+            "Run menu tests",
+            "Run self tests",
+            "Run migration validation"
+          ],
+          "acceptance_criteria": [
+            "All existing tests pass",
+            "No regressions",
+            "Migration validation passes"
+          ],
+          "status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "phase_6",
+      "name": "Documentation & Polish",
+      "duration": "0.5 day",
+      "tasks": [
+        {
+          "id": "task_6_1",
+          "name": "Update documentation",
+          "agent": "Documentation Agent",
+          "files": ["various .md files"],
+          "dependencies": ["task_5_4"],
+          "subtasks": [
+            "Update PHASE2_CURRENT_STATUS.md",
+            "Update PHASE2_NEXT_STEPS_SUMMARY.md",
+            "Create STAGE3_MIGRATION_COMPLETE.md",
+            "Update README.md",
+            "Add JSDoc comments"
+          ],
+          "acceptance_criteria": [
+            "Documentation updated",
+            "Migration status accurate",
+            "Usage examples provided"
+          ],
+          "status": "not_started"
+        },
+        {
+          "id": "task_6_2",
+          "name": "Final validation",
+          "agent": "Validation Agent",
+          "files": ["all"],
+          "dependencies": ["task_6_1"],
+          "subtasks": [
+            "Run full test suite",
+            "Test in terminal",
+            "Verify backward compatibility",
+            "Performance comparison",
+            "Memory leak check"
+          ],
+          "acceptance_criteria": [
+            "All tests pass",
+            "Visual output matches",
+            "No performance regression",
+            "No memory leaks"
+          ],
+          "status": "not_started"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 23,
+    "completed_tasks": 0,
+    "remaining_tasks": 23,
+    "critical_path": ["task_1_1", "task_1_2", "task_2_1", "task_2_2", "task_2_3", "task_2_4", "task_2_5", "task_3_1", "task_3_2", "task_3_3", "task_3_4", "task_3_5", "task_4_1", "task_4_2", "task_5_1", "task_5_2", "task_5_3", "task_5_4", "task_6_1", "task_6_2"]
+  }
+}

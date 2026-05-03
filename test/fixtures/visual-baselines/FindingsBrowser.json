@@ -1,0 +1,20 @@
+{
+  "component": "FindingsBrowser",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "┌─ Findings Browser ─────────────────────────────────┐\n│ [CRIT]    1  [HIGH]",
+    "[CRIT] CRITICAL malicious-pkg@1.0.0                 ioc-filename",
+    "          Known malicious package detected",
+    "[HIGH] HIGH     vulnerable-lib@2.3.1                cve",
+    "          Remote code execution vulnerability",
+    "[MED] MEDIUM   sketchy-dep@0.1.0                   suspicious",
+    "          Suspicious postinstall script",
+    "────────── Actions ──────────",
+    "🔍 [s] Search findings",
+    "🔧 [f] Filter by severity",
+    "← [q] Back to results"
+  ]
+}

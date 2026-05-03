@@ -1,0 +1,37 @@
+{
+  "name": "quick-start-shai-scanner",
+  "version": "1.0.0",
+  "description": "Quick start template for shai-scanner v4.6.0 supply-chain security scanning",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test test/test.js",
+    "scan": "shai-scanner --scan . --offline --no-auto-update",
+    "scan:live": "shai-scanner --scan . --live --fail-on-advisory",
+    "scan:ci": "shai-scanner --scan . --live --fail-on-advisory --sarif --output shai-scanner.sarif",
+    "scan:lockfiles": "shai-scanner --scan . --lockfiles-only --offline --no-auto-update",
+    "scan:html": "shai-scanner --scan . --html -o security-report.html",
+    "lint": "echo 'Add your linter here'",
+    "preinstall": "echo 'Run shai-scanner --scan . --lockfiles-only before installing!' || true"
+  },
+  "keywords": [
+    "security",
+    "supply-chain",
+    "shai-scanner",
+    "demo"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "shai-scanner": "^4.6.0"
+  }
+}

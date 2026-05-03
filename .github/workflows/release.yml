@@ -1,0 +1,184 @@
+name: Create GitHub Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v4.6.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Pre-release version'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Version extraction
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION_CLEAN=${VERSION#v}" >> $GITHUB_OUTPUT
+      
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          echo "Generating release notes..."
+          
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          if [ -n "$PREV_TAG" ]; then
+            echo "Previous tag: $PREV_TAG"
+            CHANGES=$(git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD)
+          else
+            echo "First release"
+            CHANGES=$(git log --pretty=format:"- %s (%h)" HEAD)
+          fi
+          
+          # Create release notes
+          cat > release_notes.md << EOF
+          # Release ${{ steps.version.outputs.VERSION }}
+          
+          ## What's New
+          $CHANGES
+          
+          ## Installation
+          \`\`\`bash
+          npm install -g shai-scanner@${{ steps.version.outputs.VERSION_CLEAN }}
+          \`\`\`
+          
+          ## Verification
+          \`\`\`bash
+          shai-scanner --version
+          \`\`\`
+          
+          ## Documentation
+          - [README](https://github.com/${{ github.repository }}#readme)
+          - [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
+          - [Architecture](https://github.com/${{ github.repository }}/blob/main/ARCHITECTURE.md)
+          
+          ## Support
+          - [GitHub Issues](https://github.com/${{ github.repository }}/issues)
+          - [Security Policy](https://github.com/${{ github.repository }}/blob/main/SECURITY.md)
+          
+          ---
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/$PREV_TAG...${{ steps.version.outputs.VERSION }}
+          EOF
+      
+      - name: Create release archive
+        run: |
+          echo "Creating release archive..."
+          
+          # Create tar.gz
+          tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            --exclude='test' \
+            --exclude='docs' \
+            --exclude='scripts' \
+            --exclude='.github' \
+            --exclude='*.md' \
+            --exclude='.npmignore' \
+            --exclude='.gitignore' \
+            .
+          
+          # Create zip
+          zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
+            -x "node_modules/*" \
+            -x ".git/*" \
+            -x "test/*" \
+            -x "docs/*" \
+            -x "scripts/*" \
+            -x ".github/*" \
+            -x "*.md" \
+            -x ".npmignore" \
+            -x ".gitignore" \
+            .
+          
+          echo "Release archives created:"
+          ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.*
+      
+      - name: Calculate checksums
+        run: |
+          echo "Calculating checksums..."
+          sha256sum shai-scanner-${{ steps.version.outputs.VERSION }}.* > checksums-${{ steps.version.outputs.VERSION }}.sha256
+          echo "Checksums:"
+          cat checksums-${{ steps.version.outputs.VERSION }}.sha256
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: shai-scanner ${{ steps.version.outputs.VERSION }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          files: |
+            shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz
+            shai-scanner-${{ steps.version.outputs.VERSION }}.zip
+            checksums-${{ steps.version.outputs.VERSION }}.sha256
+            package.json
+            README.md
+            CHANGELOG.md
+            LICENSE
+            SECURITY.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create release summary
+        if: success()
+        run: |
+          echo "## GitHub Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ✅ Release created successfully" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release URL:** https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Release Assets" >> $GITHUB_STEP_SUMMARY
+          echo "- \`shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz\` - Source archive (tar.gz)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`shai-scanner-${{ steps.version.outputs.VERSION }}.zip\` - Source archive (zip)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`checksums-${{ steps.version.outputs.VERSION }}.sha256\` - SHA256 checksums" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Quick Install" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "npm install -g shai-scanner@${{ steps.version.outputs.VERSION_CLEAN }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "## ❌ GitHub Release Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The GitHub release workflow failed. Please check the logs for details." >> $GITHUB_STEP_SUMMARY

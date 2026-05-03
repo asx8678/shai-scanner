@@ -1,0 +1,24 @@
+{
+  "component": "ScannerTUI",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "",
+    "  ╔═══════════════════════════════════════════════════════╗",
+    "  ║        🐍 Shai-Scanner TUI — Dependency Scanner       ║",
+    "  ╚═══════════════════════════════════════════════════════╝",
+    "",
+    "",
+    "  Main Menu",
+    "",
+    " ▸ 📦  Scan project",
+    "   🔍  Check package",
+    "   🔄  Update database",
+    "   🔎  Search database",
+    "   🚪  Quit",
+    "",
+    "  ↑/↓ navigate • Enter select • q quit"
+  ]
+}

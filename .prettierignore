@@ -1,0 +1,15 @@
+node_modules/
+test/
+docs/
+marketing/
+templates/
+tutorials/
+*.md
+*.html
+*.json
+scripts/
+examples/
+.github/
+*.yml
+*.yaml
+package-lock.json

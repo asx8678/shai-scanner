@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shai-Scanner Security Report - Generated 2026-05-02 21:47:29 UTC">
+  <title>Shai-Scanner Security Report</title>
+  <style>
+    :root {
+      --primary: #0F172A;
+      --primary-light: #1E293B;
+      --accent: #3B82F6;
+      --accent-hover: #2563EB;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-family);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .header .subtitle {
+      color: #94A3B8;
+      font-size: 0.875rem;
+    }
+
+    .header .timestamp {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: #64748B;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .summary-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .summary-card .label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .summary-card.status-safe .value { color: var(--success); }
+    .summary-card.status-vuln .value { color: var(--danger); }
+
+    .section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .chart-box {
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius);
+    }
+
+    .chart-box h3 {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chart-label {
+      width: 80px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .chart-bar-container {
+      flex: 1;
+      height: 24px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .chart-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+      min-width: 2px;
+    }
+
+    .chart-value {
+      width: 32px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .donut-wrapper {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .donut-total {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .donut-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .donut-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-item {
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius);
+    }
+
+    .stat-item .stat-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .stat-item .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .findings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .finding-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .finding-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .finding-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .finding-header:hover {
+      background: var(--card-bg);
+    }
+
+    .finding-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .finding-number {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .finding-type {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .finding-package {
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      background: var(--card-bg);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .expand-icon {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+    }
+
+    .finding-card.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .finding-details {
+      padding: 0 1.25rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .finding-card.expanded .finding-details {
+      max-height: 1000px;
+      padding: 0 1.25rem 1.25rem;
+    }
+
+    .finding-row {
+      display: flex;
+      padding: 0.5rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .finding-label {
+      width: 120px;
+      font-weight: 500;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .finding-value {
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .finding-value.evidence {
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      background: var(--card-bg);
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+
+    .finding-value.path {
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .finding-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .finding-value a:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .clear-message {
+      text-align: center;
+      padding: 2rem;
+      color: var(--success);
+      font-size: 1.125rem;
+    }
+
+    .clear-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .warnings-list {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .warnings-list h4 {
+      color: #92400E;
+      margin-bottom: 0.5rem;
+    }
+
+    .warning-item {
+      font-size: 0.875rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #FDE68A;
+    }
+
+    .warning-item:last-child {
+      border-bottom: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .audit-section {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius);
+    }
+
+    .audit-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .audit-success { color: var(--success); }
+    .audit-fail { color: var(--danger); }
+
+    .search-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    @media print {
+      body { background: white; }
+      .header { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .container { padding: 0; }
+      .section { box-shadow: none; border: 1px solid var(--border); break-inside: avoid; }
+      .finding-details { max-height: none !important; padding: 0 1.25rem 1.25rem !important; }
+      .filter-buttons, .search-box { display: none !important; }
+      .finding-card { break-inside: avoid; }
+    }
+
+    @media (max-width: 640px) {
+      .header { padding: 1.5rem 1rem; }
+      .header h1 { font-size: 1.5rem; }
+      .container { padding: 1rem; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
+      .finding-title { flex-direction: column; align-items: flex-start; }
+      .finding-row { flex-direction: column; }
+      .finding-label { width: auto; margin-bottom: 0.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ Shai-Scanner Security Report</h1>
+    <div class="subtitle">Supply Chain Security Assessment</div>
+    <div class="timestamp">Generated: 2026-05-02 21:47:29 UTC</div>
+  </div>
+
+  <div class="container">
+    <!-- Executive Summary -->
+    <div class="summary-grid">
+      <div class="summary-card status-safe">
+        <div class="value">✅</div>
+        <div class="label">All Clear</div>
+      </div>
+      <div class="summary-card">
+        <div class="value">0</div>
+        <div class="label">Packages Scanned</div>
+      </div>
+      <div class="summary-card">
+        <div class="value">0</div>
+        <div class="label">Lockfile Packages</div>
+      </div>
+      <div class="summary-card">
+        <div class="value">6ms</div>
+        <div class="label">Scan Duration</div>
+      </div>
+    </div>
+
+    <!-- Severity Breakdown Charts -->
+    <div class="section">
+      <div class="section-title">📊 Severity Breakdown</div>
+      <div class="charts-grid">
+        <div class="chart-box">
+          <h3>Severity Distribution</h3>
+          
+      <div class="chart-row">
+        <span class="chart-label">Critical</span>
+        <div class="chart-bar-container">
+          <div class="chart-bar" style="width:0%;background:#DC2626"></div>
+        </div>
+        <span class="chart-value">0</span>
+      </div>
+      <div class="chart-row">
+        <span class="chart-label">High</span>
+        <div class="chart-bar-container">
+          <div class="chart-bar" style="width:0%;background:#EA580C"></div>
+        </div>
+        <span class="chart-value">0</span>
+      </div>
+      <div class="chart-row">
+        <span class="chart-label">Medium</span>
+        <div class="chart-bar-container">
+          <div class="chart-bar" style="width:0%;background:#D97706"></div>
+        </div>
+        <span class="chart-value">0</span>
+      </div>
+      <div class="chart-row">
+        <span class="chart-label">Low</span>
+        <div class="chart-bar-container">
+          <div class="chart-bar" style="width:0%;background:#2563EB"></div>
+        </div>
+        <span class="chart-value">0</span>
+      </div>
+        </div>
+        <div class="chart-box">
+          <h3>Findings Overview</h3>
+          <div class="donut-empty">No findings</div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- Detailed Findings -->
+    <div class="section">
+      <div class="section-title">🔍 Detailed Findings (0)</div>
+      
+      <div class="findings-list">
+        
+        <div class="clear-message">
+          <div class="clear-icon">✅</div>
+          <p><strong>All Clear</strong></p>
+          <p>No Shai-Hulud indicators or selected live advisory matches were found in the scanned paths.</p>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Scan Statistics -->
+    <div class="section">
+      <div class="section-title">📈 Scan Statistics</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Installed Packages</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Lockfile Packages</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Manifests Scanned</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">0</div>
+          <div class="stat-label">IOC Files Checked</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">6ms</div>
+          <div class="stat-label">Total Scan Time</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">1109</div>
+          <div class="stat-label">Database IOCs</div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+        <strong>Database Sources:</strong> embedded, datadog-consolidated-shai-hulud-2, datadog-confirmed-shai-hulud-2
+      </div>
+    </div>
+
+    
+    
+  </div>
+
+  <div class="footer">
+    <p>Report generated by <strong>Shai-Scanner v4.6.0</strong></p>
+    <p>Powered by Datadog Shai-Hulud IOC feeds, OSV.dev, and GitHub Advisory Database</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchBox = document.getElementById('finding-search');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const findings = document.querySelectorAll('.finding-card');
+      let activeFilter = 'all';
+
+      if (searchBox) {
+        searchBox.addEventListener('input', function(e) {
+          const query = e.target.value.toLowerCase();
+          findings.forEach(function(finding) {
+            const text = finding.textContent.toLowerCase();
+            const matchesSearch = !query || text.includes(query);
+            const matchesFilter = activeFilter === 'all' || finding.dataset.severity === activeFilter;
+            finding.style.display = matchesSearch && matchesFilter ? '' : 'none';
+          });
+        });
+      }
+
+      filterBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          filterBtns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeFilter = btn.dataset.severity || 'all';
+          findings.forEach(function(finding) {
+            const matchesFilter = activeFilter === 'all' || finding.dataset.severity === activeFilter;
+            const query = searchBox ? searchBox.value.toLowerCase() : '';
+            const text = finding.textContent.toLowerCase();
+            const matchesSearch = !query || text.includes(query);
+            finding.style.display = matchesSearch && matchesFilter ? '' : 'none';
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

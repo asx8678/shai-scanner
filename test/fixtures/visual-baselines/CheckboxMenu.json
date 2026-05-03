@@ -1,0 +1,15 @@
+{
+  "component": "CheckboxMenu",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "Select features",
+    "▶ [x] Feature X",
+    "  [ ] Feature Y",
+    "  [x] Feature Z",
+    "",
+    "[↑↓ navigate] [Space toggle] [a all] [Enter confirm] [Esc cancel]"
+  ]
+}

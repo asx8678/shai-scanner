@@ -1,0 +1,20 @@
+{
+  "component": "ScannerTUI-scan-config",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "",
+    "  📦 Scan Configuration (component mode)",
+    "",
+    "  Paths:         .",
+    "  Node modules:  yes",
+    "  Lock files:    yes",
+    "  Manifests:     yes",
+    "  IOC files:     yes",
+    "  Live:          disabled",
+    "  Audit:         disabled",
+    "  Use legacy mode (run()) for interactive configuration"
+  ]
+}

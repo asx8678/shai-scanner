@@ -1,0 +1,50 @@
+# Test files and directories
+test/
+test-projects.txt
+test-report.html
+test-tui-imports.js
+
+# Windows Zone.Identifier files
+*:Zone.Identifier
+
+# Development files
+.github/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+dist/
+build/
+coverage/
+.cache/
+
+# Documentation that's not needed in package
+docs/
+BD_READINESS_PLAN.md
+BD_EXECUTION_PLAN.md
+BD_QUICK_REFERENCE.md
+BD_SUMMARY.md
+PHASE2_README.md
+
+# Scripts directory (not needed for end users)
+scripts/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# npm files
+.npmrc
+.npmignore

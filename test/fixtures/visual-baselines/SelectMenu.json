@@ -1,0 +1,15 @@
+{
+  "component": "SelectMenu",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "Choose an option",
+    "▶ Option A First choice",
+    "  Option B Second choice",
+    "  Option C",
+    "",
+    "[↑↓ navigate] [Enter select] [q quit]"
+  ]
+}

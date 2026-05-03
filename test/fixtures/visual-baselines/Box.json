@@ -1,0 +1,13 @@
+{
+  "component": "Box",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "┌─ Test Title ─┐",
+    "│ Hello World  │",
+    "│ Second Line  │",
+    "└──────────────┘"
+  ]
+}

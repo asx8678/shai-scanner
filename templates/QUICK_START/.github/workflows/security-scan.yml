@@ -1,0 +1,199 @@
+###############################################################################
+# Shai-Scanner Security Scan Workflow
+# Scans for Shai-Hulud, Mini Shai-Hulud, and other npm supply-chain IOCs
+# See: https://github.com/YOUR_ORG/shai-scanner
+###############################################################################
+
+name: Security Scan
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      scan_mode:
+        description: 'Scan mode (quick/full/live)'
+        required: false
+        default: 'full'
+        type: choice
+        options:
+          - quick
+          - full
+          - live
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  # ── Job 1: Fast lockfile-only scan (blocks PRs quickly) ──────────────────
+  scan-lockfiles:
+    name: 🔒 Lockfile Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install shai-scanner
+        run: npm install -g shai-scanner@4.6.0
+
+      - name: Scan lockfiles only (fast, no install needed)
+        run: |
+          shai-scanner --scan . \
+            --lockfiles-only \
+            --offline \
+            --no-auto-update \
+            --json > lockfile-scan.json
+          echo "✅ Lockfile scan complete"
+          cat lockfile-scan.json | head -50
+
+      - name: Upload lockfile scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lockfile-scan-results
+          path: lockfile-scan.json
+          retention-days: 30
+
+  # ── Job 2: Full scan with SARIF upload ───────────────────────────────────
+  full-scan:
+    name: 🔍 Full Security Scan
+    runs-on: ubuntu-latest
+    needs: scan-lockfiles
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies (safe mode)
+        run: npm ci --ignore-scripts
+
+      - name: Install shai-scanner
+        run: npm install -g shai-scanner@4.6.0
+
+      # Quick offline scan (fast, deterministic)
+      - name: Run offline IOC scan
+        run: |
+          shai-scanner --scan . \
+            --offline \
+            --no-auto-update \
+            --json > scan-results.json
+
+      # Full scan with live advisory lookups (for main branch / scheduled)
+      - name: Run live advisory scan
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        run: |
+          shai-scanner --scan . \
+            --live \
+            --fail-on-advisory \
+            --sarif \
+            --output shai-scanner.sarif
+
+      # Upload SARIF to GitHub Security tab
+      - name: Upload SARIF to GitHub Security
+        if: hashFiles('shai-scanner.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: shai-scanner.sarif
+          category: shai-scanner
+
+      # Generate HTML report for artifacts
+      - name: Generate HTML report
+        if: always()
+        run: |
+          shai-scanner --scan . \
+            --offline \
+            --no-auto-update \
+            --html -o security-report.html || true
+
+      - name: Upload scan artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-results
+          path: |
+            scan-results.json
+            shai-scanner.sarif
+            security-report.html
+          retention-days: 90
+
+  # ── Job 3: Quality gate (blocks merge on critical findings) ──────────────
+  quality-gate:
+    name: 🚦 Quality Gate
+    runs-on: ubuntu-latest
+    needs: full-scan
+    steps:
+      - name: Download scan results
+        uses: actions/download-artifact@v4
+        with:
+          name: security-scan-results
+
+      - name: Check for critical/high vulnerabilities
+        run: |
+          if [ ! -f scan-results.json ]; then
+            echo "⚠️ No scan results found — skipping gate"
+            exit 0
+          fi
+
+          CRITICAL=$(cat scan-results.json | grep -c '"severity":"critical"' || true)
+          HIGH=$(cat scan-results.json | grep -c '"severity":"high"' || true)
+
+          echo "📊 Critical: $CRITICAL | High: $HIGH"
+
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ CRITICAL vulnerabilities found — blocking merge"
+            exit 1
+          fi
+
+          if [ "$HIGH" -gt 5 ]; then
+            echo "❌ Too many HIGH vulnerabilities ($HIGH > 5) — blocking merge"
+            exit 1
+          fi
+
+          echo "✅ Quality gate passed"
+
+  # ── Job 4: Multi-project scan (optional, for monorepos) ──────────────────
+  multi-project-scan:
+    name: 🏢 Multi-Project Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install shai-scanner
+        run: npm install -g shai-scanner@4.6.0
+
+      - name: Create project list (customize for your monorepo)
+        run: |
+          cat > projects.txt << 'EOF'
+          # Monorepo projects to scan
+          ./packages/api
+          ./packages/web
+          ./packages/shared
+          EOF
+
+      - name: Scan multiple projects
+        run: |
+          shai-scanner --multi-scan projects.txt \
+            --parallel \
+            --concurrency 4 \
+            --json > multi-scan-results.json || true
+
+      - name: Upload multi-project results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: multi-project-results
+          path: multi-scan-results.json
+          retention-days: 30

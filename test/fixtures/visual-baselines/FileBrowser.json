@@ -1,0 +1,17 @@
+{
+  "component": "FileBrowser",
+  "screenSize": {
+    "cols": 80,
+    "rows": 24
+  },
+  "lines": [
+    "  Select Files",
+    "  📁 /home/adam/projects/shai-scanner",
+    "  ────────────────────────────────────────────────────────────",
+    "  (empty directory)",
+    "  ▶    ✅ Done — press Enter to finish",
+    "  ────────────────────────────────────────────────────────────",
+    "  No paths selected — Space to select, Enter to open",
+    "  [↑↓ nav] [Space select] [Enter open] [h show hidden] [a all] [Esc finish]"
+  ]
+}
