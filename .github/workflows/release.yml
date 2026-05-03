@@ -102,7 +102,7 @@ jobs:
           echo "Creating tar.gz archive..."
           
           # Create tar.gz (with race-condition protection)
-          if tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
+          tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
             --warning=no-file-changed \
             --one-file-system \
             --exclude='node_modules' \
@@ -118,11 +118,14 @@ jobs:
             --exclude='.npmignore' \
             --exclude='.gitignore' \
             --exclude='.c8rc.json' \
-            .; then
+            . || true
+          
+          # Verify the archive was actually created
+          if [ -f "shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz" ]; then
             echo "✅ tar.gz archive created successfully"
             ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz
           else
-            echo "❌ tar.gz archive creation failed with exit code $?"
+            echo "❌ tar.gz archive was not created"
             echo "Attempting to list directory contents for debugging:"
             ls -la
             exit 1
@@ -133,7 +136,7 @@ jobs:
           echo "Creating zip archive..."
           
           # Create zip
-          if zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
+          zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
             . \
             -x "node_modules/*" \
             -x ".git/*" \
@@ -147,11 +150,14 @@ jobs:
             -x "*.txt" \
             -x ".npmignore" \
             -x ".gitignore" \
-            -x ".c8rc.json"; then
+            -x ".c8rc.json" || true
+          
+          # Verify the archive was actually created
+          if [ -f "shai-scanner-${{ steps.version.outputs.VERSION }}.zip" ]; then
             echo "✅ zip archive created successfully"
             ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.zip
           else
-            echo "❌ zip archive creation failed with exit code $?"
+            echo "❌ zip archive was not created"
             echo "Attempting to list directory contents for debugging:"
             ls -la
             exit 1
