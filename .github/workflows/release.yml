@@ -97,12 +97,12 @@ jobs:
           **Full Changelog**: https://github.com/${{ github.repository }}/compare/$PREV_TAG...${{ steps.version.outputs.VERSION }}
           EOF
       
-      - name: Create release archive
+      - name: Create tar.gz archive
         run: |
-          echo "Creating release archive..."
+          echo "Creating tar.gz archive..."
           
           # Create tar.gz (with race-condition protection)
-          tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
+          if tar -czf shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz \
             --warning=no-file-changed \
             --one-file-system \
             --exclude='node_modules' \
@@ -118,10 +118,22 @@ jobs:
             --exclude='.npmignore' \
             --exclude='.gitignore' \
             --exclude='.c8rc.json' \
-            .
+            .; then
+            echo "✅ tar.gz archive created successfully"
+            ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.tar.gz
+          else
+            echo "❌ tar.gz archive creation failed with exit code $?"
+            echo "Attempting to list directory contents for debugging:"
+            ls -la
+            exit 1
+          fi
+      
+      - name: Create zip archive
+        run: |
+          echo "Creating zip archive..."
           
           # Create zip
-          zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
+          if zip -r shai-scanner-${{ steps.version.outputs.VERSION }}.zip \
             . \
             -x "node_modules/*" \
             -x ".git/*" \
@@ -135,8 +147,19 @@ jobs:
             -x "*.txt" \
             -x ".npmignore" \
             -x ".gitignore" \
-            -x ".c8rc.json"
-          
+            -x ".c8rc.json"; then
+            echo "✅ zip archive created successfully"
+            ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.zip
+          else
+            echo "❌ zip archive creation failed with exit code $?"
+            echo "Attempting to list directory contents for debugging:"
+            ls -la
+            exit 1
+          fi
+      
+      - name: Verify release archives
+        run: |
+          echo "Verifying release archives..."
           echo "Release archives created:"
           ls -lh shai-scanner-${{ steps.version.outputs.VERSION }}.*
       
